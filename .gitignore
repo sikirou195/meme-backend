@@ -1,0 +1,86 @@
+# =========================
+# BUILD / COMPILED FILES
+# =========================
+dist/
+build/
+node_modules/
+
+# =========================
+# ENV FILES
+# =========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================
+# UPLOADS
+# =========================
+uploads/
+
+# =========================
+# LOGS
+# =========================
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# =========================
+# TESTS / COVERAGE
+# =========================
+coverage/
+.nyc_output/
+
+# =========================
+# TEMP FILES
+# =========================
+.temp
+.tmp
+
+# =========================
+# RUNTIME DATA
+# =========================
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# PRISMA GENERATED
+# =========================
+generated/prisma/
+
+# =========================
+# OS FILES
+# =========================
+.DS_Store
+
+# =========================
+# IDE / EDITORS
+# =========================
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# =========================
+# VSCODE
+# =========================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# =========================
+# NODE REPORTS
+# =========================
+report.*.json

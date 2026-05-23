@@ -1,0 +1,92 @@
+import {
+  Controller,
+  Post,
+  Body,
+  UploadedFile,
+  UseInterceptors,
+  Get,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { MemeService } from './meme.service';
+
+@Controller('meme')
+export class MemeController {
+  constructor(private readonly memeService: MemeService) {}
+
+  // =========================================
+  // UPLOAD + CREATE MEME (AUTH REQUIRED)
+  // =========================================
+  @UseGuards(JwtAuthGuard)
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, callback) => {
+          const uniqueName =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+
+          callback(null, uniqueName + extname(file.originalname));
+        },
+      }),
+    }),
+  )
+  uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: any,
+    @Req() req,
+  ) {
+    const imageUrl = `http://localhost:3000/uploads/${file.filename}`;
+
+    return this.memeService.create({
+      imageUrl,
+      topText: body.topText,
+      bottomText: body.bottomText,
+      userId: req.user.userId, // ✅ lié à l'utilisateur connecté
+    });
+  }
+
+  // =========================================
+  // LIKE MEME
+  // =========================================
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/like')
+  likeMeme(@Param('id') id: string) {
+    return this.memeService.likeMeme(Number(id));
+  }
+
+  // =========================================
+  // GET MY MEMES (USER CONNECTÉ)
+  // =========================================
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  findMyMemes(@Req() req) {
+    return this.memeService.findByUser(req.user.userId);
+  }
+
+  // =========================================
+  // GET ONE MEME
+  // =========================================
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.memeService.findOne(+id);
+  }
+
+  // =========================================
+  // DELETE MEME
+  // =========================================
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.memeService.remove(+id);
+  }
+}

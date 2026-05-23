@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Meme {
+  id         Int      @id @default(autoincrement())
+  imageUrl   String
+  topText    String?
+  bottomText String?
+  likes Int  @default(0)
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+}
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  username String?
+  avatar   String?
+  bio      String?
+
+  memes    Meme[]
+}
