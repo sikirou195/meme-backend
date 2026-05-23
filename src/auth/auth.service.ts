@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
@@ -39,34 +40,34 @@ async profile(userId: number) {
   });
 }
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: dto.email,
-      },
-    });
+  const user = await this.prisma.user.findUnique({
+    where: {
+      email: dto.email,
+    },
+  });
 
-    if (!user) {
-      throw new Error('Utilisateur introuvable');
-    }
-
-    const valid = await bcrypt.compare(dto.password, user.password);
-
-    if (!valid) {
-      throw new Error('Mot de passe incorrect');
-    }
-
-    const token = this.jwtService.sign({
-      userId: user.id,
-      email: user.email,
-    });
-
-    return {
-      access_token: token,
-      user: {
-        id: user.id,
-        email: user.email,
-      },
-    };
+  if (!user) {
+    throw new UnauthorizedException('Utilisateur introuvable');
   }
+
+  const valid = await bcrypt.compare(dto.password, user.password);
+
+  if (!valid) {
+    throw new UnauthorizedException('Mot de passe incorrect');
+  }
+
+  const token = this.jwtService.sign({
+    userId: user.id,
+    email: user.email,
+  });
+
+  return {
+    access_token: token,
+    user: {
+      id: user.id,
+      email: user.email,
+    },
+  };
+}
   
 }
