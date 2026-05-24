@@ -45,7 +45,7 @@ export class MemeController {
     @Body() body: any,
     @Req() req,
   ) {
-    const imageUrl = `http://localhost:3000/uploads/${file.filename}`;
+    const imageUrl = `https://meme-backend-o55w.onrender.com/uploads/${file.filename}`;
 
     return this.memeService.create({
       imageUrl,
