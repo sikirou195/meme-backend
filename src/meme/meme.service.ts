@@ -12,7 +12,7 @@ export class MemeService {
       imageUrl: dto.imageUrl,
       topText: dto.topText,
       bottomText: dto.bottomText,
-
+      published: false,
       user: {
         connect: {
           id: dto.userId,
@@ -28,8 +28,22 @@ findByUser(userId: number) {
     orderBy: { id: 'desc' },
   });
 }
+async publishMeme(id: number) {
+  return this.prisma.meme.update({
+    where: {
+      id,
+    },
+
+    data: {
+      published: true,
+    },
+  });
+}
   findAll() {
     return this.prisma.meme.findMany({
+       where: {
+    published: true,
+  },
       orderBy: { createdAt: 'desc' },
     });
   }

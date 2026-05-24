@@ -9,6 +9,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Patch,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -81,6 +82,11 @@ export class MemeController {
     return this.memeService.findOne(+id);
   }
 
+  @Patch(':id/publish')
+@UseGuards(JwtAuthGuard)
+publishMeme(@Param('id') id: string) {
+  return this.memeService.publishMeme(Number(id));
+}
   // =========================================
   // DELETE MEME
   // =========================================
