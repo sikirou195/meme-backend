@@ -28,12 +28,12 @@ findByUser(userId: number) {
     orderBy: { id: 'desc' },
   });
 }
-async publishMeme(id: number) {
-  return this.prisma.meme.update({
+async publishMeme(id: number, userId: number) {
+  return this.prisma.meme.updateMany({
     where: {
       id,
+      userId,
     },
-
     data: {
       published: true,
     },
@@ -63,9 +63,12 @@ async likeMeme(id: number) {
     },
   });
 }
-  remove(id: number) {
-    return this.prisma.meme.delete({
-      where: { id },
-    });
-  }
+remove(id: number, userId: number) {
+  return this.prisma.meme.deleteMany({
+    where: {
+      id,
+      userId,
+    },
+  });
+}
 }

@@ -81,18 +81,29 @@ export class MemeController {
   findOne(@Param('id') id: string) {
     return this.memeService.findOne(+id);
   }
-
-  @Patch(':id/publish')
+@Patch(':id/publish')
 @UseGuards(JwtAuthGuard)
-publishMeme(@Param('id') id: string) {
-  return this.memeService.publishMeme(Number(id));
+publishMeme(
+  @Param('id') id: string,
+  @Req() req,
+) {
+  return this.memeService.publishMeme(
+    Number(id),
+    req.user.userId,
+  );
 }
   // =========================================
   // DELETE MEME
   // =========================================
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.memeService.remove(+id);
-  }
+@UseGuards(JwtAuthGuard)
+remove(
+  @Param('id') id: string,
+  @Req() req,
+) {
+  return this.memeService.remove(
+    +id,
+    req.user.userId,
+  );
+}
 }
