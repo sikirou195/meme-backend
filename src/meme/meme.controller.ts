@@ -68,6 +68,10 @@ export class MemeController {
   // =========================================
   // GET MY MEMES (USER CONNECTÉ)
   // =========================================
+  @Get('gallery')
+   findAll() {
+  return this.memeService.findAll();
+}
   @UseGuards(JwtAuthGuard)
   @Get()
   findMyMemes(@Req() req) {
