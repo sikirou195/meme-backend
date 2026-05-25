@@ -28,3 +28,16 @@ model User {
 
   memes    Meme[]
 }
+model Template {
+  id        Int      @id @default(autoincrement())
+
+  title     String
+
+  imageUrl  String
+
+  category  String?
+
+  premium   Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+}

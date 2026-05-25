@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MemeModule } from './meme/meme.module';
 import { AuthModule } from './auth/auth.module';
+import { TemplateModule } from './template/template.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
 
     MemeModule,
     AuthModule,
+    TemplateModule,
   ],
   controllers: [AppController],
   providers: [AppService],
