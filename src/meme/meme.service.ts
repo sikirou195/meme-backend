@@ -50,6 +50,7 @@ findAll() {
       user: {
         select: {
           username: true,
+          avatar: true,
         },
       },
     },
@@ -75,6 +76,25 @@ async likeMeme(id: number) {
     },
   });
 }
+
+async uploadAvatar(
+  userId: number,
+  filename: string,
+) {
+  const avatarUrl =
+    `https://meme-backend-o55w.onrender.com/uploads/${filename}`;
+
+  return this.prisma.user.update({
+    where: {
+      id: userId,
+    },
+
+    data: {
+      avatar: avatarUrl,
+    },
+  });
+}
+
 remove(id: number, userId: number) {
   return this.prisma.meme.deleteMany({
     where: {

@@ -56,6 +56,37 @@ export class MemeController {
     });
   }
 
+
+  @UseGuards(JwtAuthGuard)
+@Post('avatar')
+@UseInterceptors(
+  FileInterceptor('avatar', {
+    storage: diskStorage({
+      destination: './uploads',
+
+      filename: (req, file, callback) => {
+        const uniqueName =
+          Date.now() +
+          '-' +
+          Math.round(Math.random() * 1e9);
+
+        callback(
+          null,
+          uniqueName + extname(file.originalname),
+        );
+      },
+    }),
+  }),
+)
+uploadAvatar(
+  @UploadedFile() file: Express.Multer.File,
+  @Req() req,
+) {
+  return this.memeService.uploadAvatar(
+    req.user.userId,
+    file.filename,
+  );
+}
   // =========================================
   // LIKE MEME
   // =========================================
