@@ -39,14 +39,26 @@ async publishMeme(id: number, userId: number) {
     },
   });
 }
-  findAll() {
-    return this.prisma.meme.findMany({
-       where: {
-    published: true,
-  },
-      orderBy: { createdAt: 'desc' },
-    });
-  }
+
+findAll() {
+  return this.prisma.meme.findMany({
+    where: {
+      published: true,
+    },
+
+    include: {
+      user: {
+        select: {
+          username: true,
+        },
+      },
+    },
+
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+}
 
   findOne(id: number) {
     return this.prisma.meme.findUnique({
