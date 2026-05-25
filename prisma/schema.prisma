@@ -15,6 +15,7 @@ model Meme {
   likes Int  @default(0)
   userId Int
   published Boolean @default(false)
+  comments Comment[]
   user   User @relation(fields: [userId], references: [id])
   createdAt  DateTime @default(now())
 }
@@ -25,7 +26,7 @@ model User {
   username String?
   avatar   String?
   bio      String?
-
+  comments Comment[]
   memes    Meme[]
 }
 model Template {
@@ -38,6 +39,19 @@ model Template {
   category  String?
 
   premium   Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+}
+model Comment {
+  id        Int      @id @default(autoincrement())
+
+  content   String
+
+  memeId    Int
+  meme      Meme @relation(fields: [memeId], references: [id])
+
+  userId    Int
+  user      User @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
 }
